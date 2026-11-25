@@ -1,0 +1,32 @@
+name: Hockey league source access test
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'
+      timezone: 'America/Toronto'
+
+permissions:
+  contents: read
+
+jobs:
+  source-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test GTHL, OMHA and Tri-County source access
+        run: python scripts/check_sources.py
+      - name: Save diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hockey-source-check
+          path: reports/source-check.json
+          if-no-files-found: warn
+          retention-days: 7
