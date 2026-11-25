@@ -1,10 +1,9 @@
-name: Hockey league source access test
+name: Hockey league source access test (every 15 minutes)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 6 * * *'
-      timezone: 'America/Toronto'
+    - cron: '*/15 * * * *'
 
 permissions:
   contents: read
